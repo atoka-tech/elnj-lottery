@@ -222,79 +222,81 @@ const ElnjLottery: React.FC = () => {
       </div>
 
       {results.length > 0 && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center fade-in">
+        <div className="fixed top-0 left-0 w-full px-4 h-full flex items-center justify-center fade-in">
           <div
             className="absolute w-full h-full top-0 left-0 bg-black/30"
             onClick={() => setResults([])}
           ></div>
 
-          <div className="relative bg-white rounded w-full max-w-4xl">
+          <div className="relative bg-white rounded w-full  max-w-4xl">
             <h2 className="text-xl font-bold bg-gray-600 text-white py-2 px-5 text-center">
               抽選結果
             </h2>
 
-            <ul className="grid gap-y-4 p-5">
-              {results.map((result, index) => (
-                <li key={index}>
-                  <h3 className="text-sm font-bold">【{result.title}】</h3>
-                  <p className="text-sm">{result.selection}</p>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-y-scroll max-h-[calc(100vh-100px)] overscroll-y-none">
+              <ul className="grid gap-y-4 p-5">
+                {results.map((result, index) => (
+                  <li key={index}>
+                    <h3 className="text-sm font-bold">【{result.title}】</h3>
+                    <p className="text-sm">{result.selection}</p>
+                  </li>
+                ))}
+              </ul>
 
-            <hr />
+              <hr />
 
-            <div className="p-5 grid gap-y-3">
-              <h3 className="text-sm font-extrabold">
-                Webhookを使ってDiscordへ結果を送信する
-              </h3>
+              <div className="p-5 grid gap-y-3">
+                <h3 className="text-sm font-extrabold">
+                  Webhookを使ってDiscordへ結果を送信する
+                </h3>
 
-              <form onSubmit={onSubmit} className="flex gap-x-2 items-end">
-                <section className="grid gap-y-2 grow">
-                  <label htmlFor="webhook-title" className="grid gap-y-1">
-                    <h3 className="text-xs">ポストタイトル</h3>
-                    <input
-                      type="text"
-                      value={webhook.title}
-                      onChange={(e) =>
-                        setWebhook({ ...webhook, title: e.target.value })
-                      }
-                      id="webhook-title"
-                      required
-                      className="bg-gray-100 border-gray-300 border p-2 text-xs rounded w-full"
-                    />
-                  </label>
+                <form onSubmit={onSubmit} className="flex gap-x-2 items-end">
+                  <section className="grid gap-y-2 grow">
+                    <label htmlFor="webhook-title" className="grid gap-y-1">
+                      <h3 className="text-xs">ポストタイトル</h3>
+                      <input
+                        type="text"
+                        value={webhook.title}
+                        onChange={(e) =>
+                          setWebhook({ ...webhook, title: e.target.value })
+                        }
+                        id="webhook-title"
+                        required
+                        className="bg-gray-100 border-gray-300 border p-2 text-xs rounded w-full"
+                      />
+                    </label>
 
-                  <label htmlFor="webhook-url" className="grid gap-y-1">
-                    <h3 className="text-xs">Webhook URL</h3>
-                    <input
-                      type="text"
-                      value={webhook.url}
-                      id="webhook-url"
-                      onChange={(e) =>
-                        setWebhook({ ...webhook, url: e.target.value })
-                      }
-                      required
-                      placeholder="e.g. https://discord.com/api/webhooks/xxx"
-                      className="bg-gray-100 border-gray-300 border p-2 text-xs rounded w-full"
-                    />
-                  </label>
-                </section>
+                    <label htmlFor="webhook-url" className="grid gap-y-1">
+                      <h3 className="text-xs">Webhook URL</h3>
+                      <input
+                        type="text"
+                        value={webhook.url}
+                        id="webhook-url"
+                        onChange={(e) =>
+                          setWebhook({ ...webhook, url: e.target.value })
+                        }
+                        required
+                        placeholder="e.g. https://discord.com/api/webhooks/xxx"
+                        className="bg-gray-100 border-gray-300 border p-2 text-xs rounded w-full"
+                      />
+                    </label>
+                  </section>
 
-                <button
-                  type="submit"
-                  disabled={isSending}
-                  className="bg-gray-600 relative gap-x-1 text-sm text-white w-28 rounded py-2 disabled:opacity-50"
-                >
-                  {isSending && (
-                    <span className="absolute flex h-4 w-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    </span>
-                  )}
+                  <button
+                    type="submit"
+                    disabled={isSending}
+                    className="bg-gray-600 relative gap-x-1 text-sm text-white w-28 rounded py-2 disabled:opacity-50"
+                  >
+                    {isSending && (
+                      <span className="absolute flex h-4 w-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      </span>
+                    )}
 
-                  <span>送信</span>
-                </button>
-              </form>
+                    <span>送信</span>
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
