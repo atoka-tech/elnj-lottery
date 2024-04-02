@@ -22,6 +22,8 @@ interface Webhook {
   url: string;
 }
 
+type Versions = string[];
+
 interface Weapon {
   Label: string;
   Type: "Coop" | "Versus" | "Mission";
@@ -92,8 +94,19 @@ const ElnjLottery: React.FC = () => {
   };
 
   const loadWeapons = async (index: number) => {
+    const versions: Versions = await fetch(
+      "https://leanny.github.io/splat3/versions.json"
+    ).then(async (res) => res.json());
+
+    if (!Array.isArray(versions)) {
+      alert("ブキが読み込めませんでした。管理者に問い合わせてください");
+      return;
+    }
+
     const weapons: Weapon[] = await fetch(
-      "https://leanny.github.io/splat3/data/mush/600/WeaponInfoMain.json"
+      `https://leanny.github.io/splat3/data/mush/${
+        versions[versions.length - 1]
+      }/WeaponInfoMain.json`
     ).then((res) => res.json());
 
     const filteredWeapons = weapons
