@@ -130,10 +130,14 @@ const ElnjLottery: React.FC = () => {
 
     const payload = {
       content: webhook.title,
-      embeds: results.map((result) => ({
-        title: result.title,
-        description: result.selection,
-      })),
+      embeds: [
+        {
+          title: "抽選結果",
+          description: results
+            .map((item) => `【${item.title}】${item.selection}`)
+            .join("\n"),
+        },
+      ],
     };
 
     await fetch(webhook.url, {
@@ -249,9 +253,9 @@ const ElnjLottery: React.FC = () => {
             </h2>
 
             <div className="overflow-y-scroll max-h-[calc(100vh-100px)] overscroll-y-none">
-              <ul className="grid gap-y-4 p-5">
+              <ul className="grid gap-y-1 p-5">
                 {results.map((result, index) => (
-                  <li key={index}>
+                  <li key={index} className="flex gap-x-4">
                     <h3 className="text-sm font-bold">【{result.title}】</h3>
                     <p className="text-sm">{result.selection}</p>
                   </li>
