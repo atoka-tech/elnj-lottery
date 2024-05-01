@@ -170,11 +170,11 @@ const ElnjLottery: React.FC = () => {
           </label>
 
           <label htmlFor={`candidates-${index}`} className="grid gap-y-2">
-            <h2 className="text-sm flex justify-between">
+            <h2 className="text-sm flex justify-between items-center">
               <span>候補（改行区切り）</span>
               <button
                 onClick={() => loadWeapons(index)}
-                className="text-white bg-gray-600 text-xs px-4 py-1 rounded-full"
+                className="text-white bg-gray-600 text-xs px-2 py-1 rounded-full"
               >
                 最新のブキ一覧を読み込む
               </button>
@@ -263,7 +263,7 @@ const ElnjLottery: React.FC = () => {
                   Webhookを使ってDiscordへ結果を送信する
                 </h3>
 
-                <form onSubmit={onSubmit} className="flex gap-x-2 items-end">
+                <form onSubmit={onSubmit} className="grid gap-y-4">
                   <section className="grid gap-y-2 grow">
                     <label htmlFor="webhook-title" className="grid gap-y-1">
                       <h3 className="text-xs">ポストタイトル</h3>
@@ -298,7 +298,7 @@ const ElnjLottery: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSending}
-                    className="bg-gray-600 relative gap-x-1 text-sm text-white w-28 rounded py-2 disabled:opacity-50"
+                    className="bg-gray-800 relative gap-x-1 text-sm w-full text-white rounded py-2 disabled:opacity-50"
                   >
                     {isSending && (
                       <span className="absolute flex h-4 w-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
