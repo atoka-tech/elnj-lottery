@@ -142,6 +142,8 @@ const ElnjLottery: React.FC = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+    }).catch((error) => {
+      if (error && error.message) alert(error.message);
     });
 
     await sleep(2000);
