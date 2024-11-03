@@ -1,0 +1,68 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# workflowの実行が重複した時、最新以外をキャンセルするかどうか（nextjs workflowのサンプルにしたがって、一旦falseに）
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Cache and restore cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
+
+      - name: Run npm ci
+        shell: bash
+        run: npm ci
+
+      - name: Build
+        shell: bash
+        run: npm run build
+
+      - name: Upload files as artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    # ここで指定したurlはworkflowが完了したあとにGitHubダッシュボード上で表示される（クリックでそのURLが開かれるだけの機能）
+    # urlのsteps.deplymentはこのjobのidがdeploymentのstepを指している（つまりactions/deploy-pagesを使っているstep）
+    # actions/deploy-pagesのoutputsにpage_urlというものがあり、それをenvironment.urlに指定しているという形
+    # see. https://docs.github.com/ja/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    # bojs.buildに依存していることを明示。明示されているjobが完了しないとこのjob（deploy）は実行されない
+    # see. https://docs.github.com/ja/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
