@@ -22,26 +22,32 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
-          cache: "npm"
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Cache and restore cache
         uses: actions/cache@v4
         with:
           path: .next/cache
-          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
+          key: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
 
-      - name: Run npm ci
+      - name: Install dependencies
         shell: bash
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         shell: bash
-        run: npm run build
+        run: pnpm run build
 
       - name: Upload files as artifact
         uses: actions/upload-pages-artifact@v3
